@@ -1,22 +1,22 @@
-# Use a Node.js base image with build tools
+# Use a base image with Node.js and Debian (good for native builds)
 FROM node:18-bullseye
 
 # Set working directory
 WORKDIR /app
 
-# Copy only package.json to install dependencies
+# Copy only the package.json
 COPY package.json ./
 
-# Install system dependencies needed for native modules
+# Install system dependencies: build tools + cmake (required for raknet-native)
 RUN apt-get update && \
-    apt-get install -y python3 g++ make && \
+    apt-get install -y python3 g++ make cmake && \
     npm install
 
-# Copy the rest of your project files
+# Copy the rest of your code
 COPY . .
 
-# Expose port if needed (optional)
+# Expose port (optional)
 EXPOSE 3000
 
-# Start the bot
+# Start the app
 CMD ["npm", "start"]
