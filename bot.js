@@ -640,3 +640,5 @@ if (require.main === module) {
 
 module.exports = GeminiMinecraftBot;
 
+// at the bottom of bot.js
+require('express')().listen(3000, () => console.log('Health check ready'));
