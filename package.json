@@ -1,0 +1,42 @@
+{
+  "name": "gemini-minecraft-bot",
+  "version": "1.0.0",
+  "description": "An intelligent Minecraft Bedrock bot powered by Google's Gemini AI",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "node --inspect bot.js",
+    "test": "node test.js",
+    "setup": "node setup.js"
+  },
+  "keywords": [
+    "minecraft",
+    "bedrock",
+    "bot",
+    "gemini",
+    "ai",
+    "gaming",
+    "automation"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.17.1",
+    "bedrock-protocol": "^3.35.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/gemini-minecraft-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/gemini-minecraft-bot/issues"
+  },
+  "homepage": "https://github.com/yourusername/gemini-minecraft-bot#readme"
+}
