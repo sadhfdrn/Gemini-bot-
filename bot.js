@@ -633,12 +633,42 @@ DEBUG_MODE=false`;
     });
 }
 
-// Run the bot
+// Run the bot if this script is executed directly
 if (require.main === module) {
-    runInteractiveBot().catch(console.error);
+  runInteractiveBot().catch(console.error);
+
+  // ✅ Dummy server for Koyeb health check
+  require('express')()
+    .get('/', (_, res) => res.send('OK'))
+    .listen(3000, () => {
+      console.log('🌐 Health check server running on port 3000');
+    });
+}
+
+// Bot connection logic
+async connect() {
+  if (this.config.host === 'simulation') {
+    console.log('🧪 Simulation mode activated via config');
+    return this.simulateConnection();
+  }
+
+  console.log(`🎮 Connecting ${this.config.username} to ${this.config.host}:${this.config.port}`);
+  try {
+    this.client = bedrock.createClient({
+      host: this.config.host,
+      port: this.config.port,
+      username: this.config.username,
+      version: this.config.version,
+      skipPing: true
+    });
+
+    this.setupEventHandlers();
+
+  } catch (error) {
+    console.error('❌ Connection failed:', error.message);
+    console.log('🎭 Falling back to simulation mode');
+    this.simulateConnection();
+  }
 }
 
 module.exports = GeminiMinecraftBot;
-
-// at the bottom of bot.js
-require('express')().listen(3000, () => console.log('Health check ready'));
