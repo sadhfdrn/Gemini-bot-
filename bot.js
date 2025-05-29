@@ -646,28 +646,65 @@ if (require.main === module) {
 }
 
 // Bot connection logic
-async connect() {
-  if (this.config.host === 'simulation') {
-    console.log('🧪 Simulation mode activated via config');
-    return this.simulateConnection();
+class GeminiMinecraftBot {
+  constructor(config) {
+    this.config = config;
+    this.client = null;
   }
 
-  console.log(`🎮 Connecting ${this.config.username} to ${this.config.host}:${this.config.port}`);
-  try {
-    this.client = bedrock.createClient({
-      host: this.config.host,
-      port: this.config.port,
-      username: this.config.username,
-      version: this.config.version,
-      skipPing: true
-    });
+  async connect() {
+    if (this.config.host === 'simulation') {
+      console.log('🧪 Simulation mode activated via config');
+      return this.simulateConnection();
+    }
+
+    console.log(`🎮 Connecting ${this.config.username} to ${this.config.host}:${this.config.port}`);
+    try {
+      this.client = bedrock.createClient({
+        host: this.config.host,
+        port: this.config.port,
+        username: this.config.username,
+        version: this.config.version,
+        skipPing: true
+      });
+
+      this.setupEventHandlers();
+
+    } catch (error) {
+      console.error('❌ Connection failed:', error.message);
+      console.log('🎭 Falling back to simulation mode');
+      this.simulateConnection();
+    }
+  }
+
+  simulateConnection() {
+    console.log('🧪 Bot is running in simulated mode (no server connection).');
+    this.client = {
+      on: (event, handler) => {
+        if (event === 'chat') {
+          setInterval(() => {
+            handler({ message: 'Hello from simulation!' });
+          }, 5000);
+        }
+      },
+      write: (packetName, data) => {
+        console.log(`✉️ Simulated sending ${packetName} with data:`, data);
+      }
+    };
 
     this.setupEventHandlers();
+  }
 
-  } catch (error) {
-    console.error('❌ Connection failed:', error.message);
-    console.log('🎭 Falling back to simulation mode');
-    this.simulateConnection();
+  setupEventHandlers() {
+    this.client.on('chat', (packet) => {
+      console.log(`💬 Received chat: ${packet.message}`);
+      this.respondToMessage(packet.message);
+    });
+  }
+
+  respondToMessage(message) {
+    console.log(`🤖 Responding to: ${message}`);
+    // This is where your Gemini API integration would happen
   }
 }
 
