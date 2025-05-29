@@ -4,7 +4,17 @@ const bedrock = require('bedrock-protocol');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const readline = require('readline');
 const EventEmitter = require('events');
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
 
+app.get('/', (req, res) => {
+  res.send('✅ Server is running!');
+});
+
+app.listen(PORT, () => {
+  console.log(`🌐 Express server listening on port ${PORT}`);
+});
 class GeminiMinecraftBot extends EventEmitter {
     constructor(options = {}) {
         super();
@@ -633,79 +643,9 @@ DEBUG_MODE=false`;
     });
 }
 
-// Run the bot if this script is executed directly
+// Run the bot
 if (require.main === module) {
-  runInteractiveBot().catch(console.error);
-
-  // ✅ Dummy server for Koyeb health check
-  require('express')()
-    .get('/', (_, res) => res.send('OK'))
-    .listen(3000, () => {
-      console.log('🌐 Health check server running on port 3000');
-    });
-}
-
-// Bot connection logic
-class GeminiMinecraftBot {
-  constructor(config) {
-    this.config = config;
-    this.client = null;
-  }
-
-  async connect() {
-    if (this.config.host === 'simulation') {
-      console.log('🧪 Simulation mode activated via config');
-      return this.simulateConnection();
-    }
-
-    console.log(`🎮 Connecting ${this.config.username} to ${this.config.host}:${this.config.port}`);
-    try {
-      this.client = bedrock.createClient({
-        host: this.config.host,
-        port: this.config.port,
-        username: this.config.username,
-        version: this.config.version,
-        skipPing: true
-      });
-
-      this.setupEventHandlers();
-
-    } catch (error) {
-      console.error('❌ Connection failed:', error.message);
-      console.log('🎭 Falling back to simulation mode');
-      this.simulateConnection();
-    }
-  }
-
-  simulateConnection() {
-    console.log('🧪 Bot is running in simulated mode (no server connection).');
-    this.client = {
-      on: (event, handler) => {
-        if (event === 'chat') {
-          setInterval(() => {
-            handler({ message: 'Hello from simulation!' });
-          }, 5000);
-        }
-      },
-      write: (packetName, data) => {
-        console.log(`✉️ Simulated sending ${packetName} with data:`, data);
-      }
-    };
-
-    this.setupEventHandlers();
-  }
-
-  setupEventHandlers() {
-    this.client.on('chat', (packet) => {
-      console.log(`💬 Received chat: ${packet.message}`);
-      this.respondToMessage(packet.message);
-    });
-  }
-
-  respondToMessage(message) {
-    console.log(`🤖 Responding to: ${message}`);
-    // This is where your Gemini API integration would happen
-  }
+    runInteractiveBot().catch(console.error);
 }
 
 module.exports = GeminiMinecraftBot;
