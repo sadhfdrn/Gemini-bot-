@@ -475,5 +475,7 @@ class ConfigManager {
         };
     }
 }
-
-module.exports = ConfigManager;
+module.exports = {
+    ConfigManager,
+    getEnv
+};
