@@ -15,7 +15,7 @@ const GameplayManager = require('./modules/GameplayManager');
 const LearningManager = require('./modules/LearningManager');
 const NavigationManager = require('./modules/NavigationManager');
 const CombatManager = require('./modules/CombatManager');
-const ConfigManager = require('./modules/ConfigManager');
+const { ConfigManager, getEnv } = require('./modules/ConfigManager');
 const EventManager = require('./modules/EventManager');
 const { getEnv } = require('./modules/ConfigManager');
 // Global bot instance for API access
