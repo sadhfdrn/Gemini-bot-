@@ -16,4 +16,4 @@ RUN npm install express
 
 EXPOSE 3000
 
-CMD ["node", "bot.js"]
+CMD ["node", "ender_dragon_bot.js"]
