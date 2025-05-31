@@ -1,7 +1,18 @@
 // modules/ConfigManager.js - Fixed version for Koyeb deployment
 const fs = require('fs').promises;
 const path = require('path');
+function getEnv(key) {
+    const raw = process.env[key];
+    const value = typeof raw === 'string' ? raw.trim() : undefined;
 
+    if (!value) {
+        console.warn(`⚠️ Environment variable "${key}" is not set or empty`);
+    } else {
+        console.log(`✅ "${key}" loaded from environment: ${value.length} characters`);
+    }
+
+    return value;
+}
 class ConfigManager {
     constructor(initialOptions = {}) {
         this.configPath = path.join(__dirname, '../config/bot-config.json');
