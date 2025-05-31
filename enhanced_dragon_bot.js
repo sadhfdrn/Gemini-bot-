@@ -116,11 +116,13 @@ class EnderDragonMissionBot extends EventEmitter {
         this.configManager = new ConfigManager(options);
         this.config = this.configManager.getConfig();
         
-        // Validate required environment variables
-        if (!this.config.geminiApiKey) {
-            console.error('❌ GEMINI_API_KEY is required! Please set it in your .env file');
-            process.exit(1);
-        }
+        // Validate required environment variable
+const GEMINI_API_KEY = getEnv('GEMINI_API_KEY');
+
+if (!GEMINI_API_KEY) {
+    console.error('❌ GEMINI_API_KEY is required! Please set it in your environment variables.');
+    process.exit(1);
+}
 
         // Initialize Gemini AI with enhanced configuration
         this.genAI = new GoogleGenerativeAI(this.config.geminiApiKey);
